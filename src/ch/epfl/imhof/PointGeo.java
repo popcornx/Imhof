@@ -5,12 +5,13 @@ package ch.epfl.imhof;
  */
 public final class PointGeo {
 
-    private final double lon, lat;
+    private final double lon;
+    private final double lat;
 
-    public PointGeo(double longitude, double latitude) throws IllegalArgumentException{
-        if(Math.abs(longitude) > Math.PI)
+    public PointGeo(double longitude, double latitude) throws IllegalArgumentException {
+        if (Math.abs(longitude) > Math.PI)
             throw new IllegalArgumentException("Longitude out of range: " + longitude);
-        if(Math.abs(latitude) > Math.PI/2)
+        if (Math.abs(latitude) > Math.PI / 2)
             throw new IllegalArgumentException("Latitude out of range: " + latitude);
         this.lon = longitude;
         this.lat = latitude;

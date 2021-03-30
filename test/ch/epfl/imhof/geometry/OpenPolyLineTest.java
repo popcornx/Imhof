@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.Test;
 
 public final class OpenPolyLineTest extends PolyLineTest {
+
     @Override
     PolyLine newPolyLine(List<Point> ps) {
         return new OpenPolyLine(ps);

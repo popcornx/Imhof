@@ -45,8 +45,7 @@ public class AttributesTest {
 	public void containedKeys() {
 		HashMap<String, String> testData = sampleAttributesValues();
 		Attributes testAttributes = new Attributes(testData);
-		assertTrue(testAttributes.contains("testKey 1")
-				&& testAttributes.contains("testKey 2")
+		assertTrue(testAttributes.contains("testKey 1") && testAttributes.contains("testKey 2")
 				&& testAttributes.contains("testKey 3"));
 		assertFalse(testAttributes.contains("testKey 4"));
 	}
@@ -91,8 +90,7 @@ public class AttributesTest {
 		testBuild.put("testKey 2", "testValue 2");
 		testBuild.put("testKey 3", "testValue 3");
 		Attributes test = testBuild.build();
-		assertTrue(test.contains("testKey 1") && test.contains("testKey 2")
-				&& test.contains("testKey 3"));
+		assertTrue(test.contains("testKey 1") && test.contains("testKey 2") && test.contains("testKey 3"));
 		assertEquals(test.get("testKey 1"), "testValue 1");
 		assertEquals(test.get("testKey 2"), "testValue 2");
 		assertEquals(test.get("testKey 3"), "testValue 3");
@@ -117,8 +115,7 @@ public class AttributesTest {
 		keptKeys.add("testKey 1");
 		keptKeys.add("testKey 3");
 		Attributes testResult = testAttributes.keepOnlyKeys(keptKeys);
-		assertTrue(testResult.contains("testKey 1")
-				&& testResult.contains("testKey 3")
+		assertTrue(testResult.contains("testKey 1") && testResult.contains("testKey 3")
 				&& !testResult.contains("testKey 2"));
 	}
 
@@ -132,10 +129,8 @@ public class AttributesTest {
 		keptKeys.add("testKey 3");
 		keptKeys.add("testKey 4");
 		Attributes testResult = testAttributes.keepOnlyKeys(keptKeys);
-		assertTrue(testResult.contains("testKey 1")
-				&& testResult.contains("testKey 2")
-				&& testResult.contains("testKey 3")
-				&& !testResult.contains("testKey 4"));
+		assertTrue(testResult.contains("testKey 1") && testResult.contains("testKey 2")
+				&& testResult.contains("testKey 3") && !testResult.contains("testKey 4"));
 	}
 
 	@Test

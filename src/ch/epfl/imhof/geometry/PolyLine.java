@@ -12,7 +12,7 @@ public abstract class PolyLine {
     private final List<Point> points;
 
     public PolyLine(List<Point> points) {
-        if(points.isEmpty())
+        if (points.isEmpty())
             throw new IllegalArgumentException("No Points in this list.");
         this.points = Collections.unmodifiableList(new ArrayList<Point>(points));
     }
@@ -23,22 +23,22 @@ public abstract class PolyLine {
         return points;
     }
 
-    public Point firstPoint(){
+    public Point firstPoint() {
         return points.get(0);
     }
 
-    public static final class Builder{
-        private List<Point> points = new ArrayList<Point>();
+    public static final class Builder {
+        private List<Point> points = new ArrayList<>();
 
-        public void addPoint(Point newPoint){
+        public void addPoint(Point newPoint) {
             points.add(newPoint);
         }
 
-        public OpenPolyLine buildOpen(){
+        public OpenPolyLine buildOpen() {
             return new OpenPolyLine(points);
         }
 
-        public ClosedPolyLine buildClosed(){
+        public ClosedPolyLine buildClosed() {
             return new ClosedPolyLine(points);
         }
     }

@@ -6,10 +6,11 @@ import ch.epfl.imhof.geometry.Point;
 /**
  * @author Lorenz Rasch
  */
-public final class EquirectangularProjection implements Projection{
+public final class EquirectangularProjection implements Projection {
+
     @Override
     public Point project(PointGeo point) {
-    return new Point(point.longitude(), point.latitude());
+        return new Point(point.longitude(), point.latitude());
     }
 
     @Override
