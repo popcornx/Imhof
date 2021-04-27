@@ -14,7 +14,7 @@ public final class Polygon {
 
     public Polygon(ClosedPolyLine shell, List<ClosedPolyLine> holes) {
         this.shell = shell;
-        this.holes = Collections.unmodifiableList(new ArrayList<ClosedPolyLine>(holes));
+        this.holes = Collections.unmodifiableList(new ArrayList<>(holes));
     }
 
     public Polygon(ClosedPolyLine shell) {

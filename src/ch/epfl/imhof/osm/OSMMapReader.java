@@ -16,14 +16,19 @@ import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 
 public final class OSMMapReader {
+    /**
+     *
+     */
+    private static final String RELATION = "relation";
     private static OSMMap.Builder mb;
-    private final static Projection proj = new CH1903Projection();
+    private static final Projection proj = new CH1903Projection();
 
-    private OSMMapReader() {}
+    private OSMMapReader() {
+    }
 
-    public static OSMMap readOSMFile(String fileName, boolean unGZip) throws SAXException, IOException{
+    public static OSMMap readOSMFile(String fileName, boolean unGZip) throws SAXException, IOException {
         mb = new OSMMap.Builder();
-        if(unGZip){
+        if (unGZip) {
             try (InputStream i = new GZIPInputStream(new FileInputStream(fileName))) {
                 parse(i);
                 return mb.build();
@@ -47,96 +52,98 @@ public final class OSMMapReader {
             private OSMNode n;
             private OSMWay w;
             private OSMRelation r;
+
             @Override
-            public void startElement(String uri,
-                                     String lName,
-                                     String qName,
-                                     Attributes atts)
-                    throws SAXException {
-                switch (qName){
-                    case "node":
-                        currentElementType = OSMRelation.Member.Type.NODE;
-                        Point p = new Point(Double.parseDouble(atts.getValue("lat")), Double.parseDouble(atts.getValue("lon")));
-                        nb = new OSMNode.Builder(
-                                Long.parseLong(atts.getValue("id")),
-                                proj.inverse(p));
-                        break;
-                    case "way":
-                        currentElementType = OSMRelation.Member.Type.WAY;
-                        wb = new OSMWay.Builder(Long.parseLong(atts.getValue("id")));
-                        break;
-                    case "nd":
-                        if((n = mb.nodeForId(Long.parseLong(atts.getValue("ref")))) != null){
-                            wb.addNode(n);
-                        }
-                        else {
-                            wb.setIncomplete();
-                        }
-                        break;
-                    case "tag":
-                        switch(currentElementType){
-                            case WAY:
-                                wb.setAttribute(atts.getValue("k"), atts.getValue("v"));
-                                break;
-                            case RELATION:
-                                rb.setAttribute(atts.getValue("k"), atts.getValue("v"));
-                                break;
-                        }
-                        break;
-                    case "relation":
-                        currentElementType = OSMRelation.Member.Type.RELATION;
-                        rb = new OSMRelation.Builder(Long.parseLong(atts.getValue("id")));
-                        break;
-                    case "member":
-                        switch(atts.getValue("type")){
-                            case "node":
-                                if( (n = mb.nodeForId(Long.parseLong(atts.getValue("ref")))) != null){
-                                    rb.addMember(OSMRelation.Member.Type.NODE, atts.getValue("role"), n);
-                                } else {
-                                    rb.setIncomplete();
-                                }
-                                break;
-                            case "way":
-                                if((w = mb.wayForId(Long.parseLong(atts.getValue("ref")))) != null){
-                                    rb.addMember(OSMRelation.Member.Type.WAY, atts.getValue("role"), w);
-                                } else {
-                                    rb.setIncomplete();
-                                }
-                                break;
-                            case "relation":
-                                if((r = mb.relationForId(Long.parseLong(atts.getValue("ref")))) != null){
-                                    rb.addMember(OSMRelation.Member.Type.RELATION, atts.getValue("role"), r);
-                                } else {
-                                    rb.setIncomplete();
-                                }
-                                break;
-                        }
+            public void startElement(String uri, String lName, String qName, Attributes atts) throws SAXException {
+                switch (qName) {
+                case "node":
+                    currentElementType = OSMRelation.Member.Type.NODE;
+                    Point p = new Point(Double.parseDouble(atts.getValue("lat")),
+                            Double.parseDouble(atts.getValue("lon")));
+                    nb = new OSMNode.Builder(Long.parseLong(atts.getValue("id")), proj.inverse(p));
+                    break;
+                case "way":
+                    currentElementType = OSMRelation.Member.Type.WAY;
+                    wb = new OSMWay.Builder(Long.parseLong(atts.getValue("id")));
+                    break;
+                case "nd":
+                    if ((n = mb.nodeForId(Long.parseLong(atts.getValue("ref")))) != null) {
+                        wb.addNode(n);
+                    } else {
+                        wb.setIncomplete();
                     }
-                }
-
-
-            @Override
-            public void endElement(String uri,
-                                   String lName,
-                                   String qName) {
-                switch(qName){
+                    break;
+                case "tag":
+                    switch (currentElementType) {
+                    case WAY:
+                        wb.setAttribute(atts.getValue("k"), atts.getValue("v"));
+                        break;
+                    case RELATION:
+                        rb.setAttribute(atts.getValue("k"), atts.getValue("v"));
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                case RELATION:
+                    currentElementType = OSMRelation.Member.Type.RELATION;
+                    rb = new OSMRelation.Builder(Long.parseLong(atts.getValue("id")));
+                    break;
+                case "member":
+                    switch (atts.getValue("type")) {
                     case "node":
-                        try{
-                            mb.addNode(nb.build());
+                        if ((n = mb.nodeForId(Long.parseLong(atts.getValue("ref")))) != null) {
+                            rb.addMember(OSMRelation.Member.Type.NODE, atts.getValue("role"), n);
+                        } else {
+                            rb.setIncomplete();
                         }
-                        catch(IllegalStateException e){}
                         break;
                     case "way":
-                        try{
-                            mb.addWay(wb.build());
+                        if ((w = mb.wayForId(Long.parseLong(atts.getValue("ref")))) != null) {
+                            rb.addMember(OSMRelation.Member.Type.WAY, atts.getValue("role"), w);
+                        } else {
+                            rb.setIncomplete();
                         }
-                        catch(IllegalStateException e){}
                         break;
-                    case "relation":
-                        try{
-                            mb.addRelation(rb.build());
+                    case RELATION:
+                        if ((r = mb.relationForId(Long.parseLong(atts.getValue("ref")))) != null) {
+                            rb.addMember(OSMRelation.Member.Type.RELATION, atts.getValue("role"), r);
+                        } else {
+                            rb.setIncomplete();
                         }
-                        catch(IllegalStateException e){}
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                default:
+                    break;
+                }
+            }
+
+            @Override
+            public void endElement(String uri, String lName, String qName) {
+                switch (qName) {
+                case "node":
+                    try {
+                        mb.addNode(nb.build());
+                    } catch (IllegalStateException e) {
+                    }
+                    break;
+                case "way":
+                    try {
+                        mb.addWay(wb.build());
+                    } catch (IllegalStateException e) {
+                    }
+                    break;
+                case RELATION:
+                    try {
+                        mb.addRelation(rb.build());
+                    } catch (IllegalStateException e) {
+                    }
+                    break;
+                default:
+                    break;
                 }
             }
         });

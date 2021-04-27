@@ -22,7 +22,7 @@ public final class OSMMap {
         return relations;
     }
 
-    public final static class Builder {
+    public static final class Builder {
 
         private final List<OSMNode> nodes = new ArrayList<>();
         private final List<OSMWay> ways = new ArrayList<>();

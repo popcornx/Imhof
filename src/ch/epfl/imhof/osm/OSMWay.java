@@ -15,7 +15,7 @@ public final class OSMWay extends OSMEntity {
         if (nodes.size() < 2) {
             throw new IllegalArgumentException();
         }
-        this.nodes = Collections.unmodifiableList(new ArrayList<OSMNode>(nodes));
+        this.nodes = Collections.unmodifiableList(new ArrayList<>(nodes));
     }
 
     public int nodesCount() {
@@ -65,7 +65,7 @@ public final class OSMWay extends OSMEntity {
         }
 
         @Override
-        public OSMWay build() throws IllegalStateException{
+        public OSMWay build() throws IllegalStateException {
             if (isIncomplete()) {
                 throw new IllegalStateException();
             } else {

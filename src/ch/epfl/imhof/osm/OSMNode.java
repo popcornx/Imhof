@@ -26,7 +26,7 @@ public final class OSMNode extends OSMEntity {
         }
 
         @Override
-        public OSMNode build() throws IllegalStateException{
+        public OSMNode build() throws IllegalStateException {
             if (isIncomplete()) {
                 throw new IllegalStateException();
             } else {
