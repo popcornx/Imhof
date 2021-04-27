@@ -10,7 +10,7 @@ public final class OSMWay extends OSMEntity {
 
     private final List<OSMNode> nodes;
 
-    public OSMWay(long id, List<OSMNode> nodes, Attributes attributes) {
+    public OSMWay(long id, List<OSMNode> nodes, Attributes attributes) throws IllegalArgumentException {
         super(id, attributes);
         if (nodes.size() < 2) {
             throw new IllegalArgumentException();
@@ -65,7 +65,7 @@ public final class OSMWay extends OSMEntity {
         }
 
         @Override
-        public OSMWay build() {
+        public OSMWay build() throws IllegalStateException{
             if (isIncomplete()) {
                 throw new IllegalStateException();
             } else {

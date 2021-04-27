@@ -11,7 +11,7 @@ public abstract class PolyLine {
 
     private final List<Point> points;
 
-    public PolyLine(List<Point> points) {
+    public PolyLine(List<Point> points) throws IllegalArgumentException {
         if (points.isEmpty())
             throw new IllegalArgumentException("No Points in this list.");
         this.points = Collections.unmodifiableList(new ArrayList<Point>(points));
