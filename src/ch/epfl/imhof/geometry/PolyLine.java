@@ -29,7 +29,7 @@ public abstract class PolyLine {
     }
 
     public static final class Builder {
-        private List<Point> points = new ArrayList<>();
+        private final List<Point> points = new ArrayList<>();
 
         public void addPoint(Point newPoint) {
             points.add(newPoint);
